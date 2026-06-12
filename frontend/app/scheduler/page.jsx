@@ -81,8 +81,7 @@ export default function Scheduler() {
   const handleTimeClick = (time) => {
     setSelectedTime(
       selectedTime && selectedTime.compare(time) === 0 ? null : time,
-    )
-    console.log(time);
+    );
   };
 
   const scrollToActivities = () => {

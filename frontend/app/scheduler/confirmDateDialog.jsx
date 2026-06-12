@@ -22,8 +22,33 @@ function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activiti
         setOpen(false);
     };
 
-    const submitPlan = () => {
-        router.push("/confirmation");
+    const submitPlan = async () => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schedule`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    date: selectedDate,
+                    time: selectedTime,
+                    activities: activities
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Something went wrong: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log(result);
+
+            if (result.status === "success") {
+                router.push("/confirmation");
+            }
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
