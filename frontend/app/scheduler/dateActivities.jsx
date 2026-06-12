@@ -1,11 +1,9 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-
 
 const activities = [
   {
@@ -80,9 +78,7 @@ const activities = [
   }
 ];
 
-export default function DateActivities() {
-  const [selectedActivities, setSelectedActivities] = React.useState([]);
-
+export default function DateActivities({ selectedActivities, setSelectedActivities }) {
   return (
     <Box
       sx={{
@@ -92,7 +88,7 @@ export default function DateActivities() {
         gap: 2,
       }}
     >
-      {activities.map((activity, index) => (
+      {activities.map((activity) => (
         <Card key={activity.id}>
           <CardActionArea
             onClick={() => {

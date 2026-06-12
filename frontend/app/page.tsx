@@ -19,7 +19,7 @@ export default function Home() {
       setCurrAdjIndex((prevIndex) => (prevIndex + 1) % adjectives.length);
     }
 
-    const intervalId = setInterval(changeAdjective, 5000);
+    const intervalId = setInterval(changeAdjective, 3000);
 
     return () => clearInterval(intervalId);
   }, []);

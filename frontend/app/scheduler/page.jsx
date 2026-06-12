@@ -10,7 +10,10 @@ import {
   Stack,
   Text,
   VStack,
-  IconButton
+  IconButton,
+  CloseButton,
+  Dialog,
+  Portal
 } from "@chakra-ui/react";
 import {
   Time,
@@ -22,6 +25,7 @@ import { useState, useRef } from "react";
 import { LuGlobe, LuArrowRight, LuArrowLeft } from "react-icons/lu";
 
 import DateActivities from "./dateActivities";
+import ConfirmDateDialog from "./confirmDateDialog";
 
 
 export default function Scheduler() {
@@ -30,6 +34,9 @@ export default function Scheduler() {
 
   const [selectedDate, setSelectedDate] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedActivities, setSelectedActivities] = useState([]);
+  const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
   const scrollContainerRef = useRef(null);
 
@@ -80,7 +87,7 @@ export default function Scheduler() {
 
   const scrollToActivities = () => {
     if (!selectedTime || !selectedDate[0]) {
-      alert("Please select a date and time, beautiful!");
+      setIsErrorDialogOpen(true);
       return;
     }
 
@@ -133,6 +140,29 @@ export default function Scheduler() {
       overflowY="hidden"
     >
       <Flex w="200vw" h="100vh">
+        <Dialog.Root lazyMount open={isErrorDialogOpen} onOpenChange={(e) => setIsErrorDialogOpen(e.open)} placement="center">
+          <Portal>
+            <Dialog.Backdrop />
+            <Dialog.Positioner>
+              <Dialog.Content>
+                <Dialog.Header>
+                  <Dialog.Title>Not so fast, cutie!</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>
+                  You need to select a date and time for us to meet, beautiful!
+                </Dialog.Body>
+                <Dialog.Footer>
+                  <Dialog.ActionTrigger asChild>
+                    <Button>Ok!</Button>
+                  </Dialog.ActionTrigger>
+                </Dialog.Footer>
+                <Dialog.CloseTrigger asChild>
+                  <CloseButton size="sm" />
+                </Dialog.CloseTrigger>
+              </Dialog.Content>
+            </Dialog.Positioner>
+          </Portal>
+        </Dialog.Root>
         <Center h="100vh" w="100vw" bgColor="pink.50" flexShrink={0}>
           <VStack gap="4rem">
             <h1 className='!font-sans !text-2xl !font-bold'>Select when you would like to meet</h1>
@@ -247,14 +277,15 @@ export default function Scheduler() {
                 <Box w="40px" />
               </HStack>
               <HStack>
-                <DateActivities />
-                <IconButton aria-label="Confirm" rounded="full" onClick={scrollToActivities}>
+                <DateActivities selectedActivities={selectedActivities} setSelectedActivities={setSelectedActivities} />
+                <IconButton aria-label="Confirm" rounded="full" onClick={() => setIsConfirmDialogOpen(true)}>
                   <LuArrowRight />
                 </IconButton>
               </HStack>
             </VStack>
           </Center>
         </Box>
+        <ConfirmDateDialog open={isConfirmDialogOpen} setOpen={setIsConfirmDialogOpen} selectedDate={selectedDate} selectedTime={selectedTime} activities={selectedActivities} />
       </Flex>
     </Box>
   )
