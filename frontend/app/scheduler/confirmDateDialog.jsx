@@ -5,17 +5,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { IconButton } from "@chakra-ui/react";
+import { IconButton, Spinner, Box, Center } from "@chakra-ui/react";
 import { GiConfirmed, GiCancel } from "react-icons/gi";
 import { useRouter } from "next/navigation";
 
-import { forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activities }) {
+    const [scheduling, setScheduling] = useState(false);
+
     const router = useRouter();
 
     const handleClose = () => {
@@ -23,6 +25,8 @@ function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activiti
     };
 
     const submitPlan = async () => {
+        setScheduling(true);
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schedule`, {
                 method: "POST",
@@ -48,6 +52,8 @@ function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activiti
             }
         } catch (err) {
             console.log(err);
+        } finally {
+            setScheduling(false);
         }
     };
 
@@ -98,6 +104,11 @@ function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activiti
                     </IconButton>
                 </DialogActions>
             </Dialog>
+            {scheduling ? <Box pos="absolute" zIndex={9999} inset="0" bg="bg/80">
+                <Center h="full">
+                    <Spinner color="teal.500" size="xl" />
+                </Center>
+            </Box> : <></>}
         </React.Fragment>
     );
 }

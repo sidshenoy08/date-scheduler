@@ -1,7 +1,8 @@
 'use client'
 
-import { Button, VStack, Center } from "@chakra-ui/react"
-import { RiArrowRightLine } from "react-icons/ri"
+import { Button, VStack, Center } from "@chakra-ui/react";
+import { RiArrowRightLine } from "react-icons/ri";
+import TextTransition, { presets } from 'react-text-transition';
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -29,7 +30,7 @@ export default function Home() {
       <HeartRain />
       <Center h="100vh" bgColor="pink.100">
         <VStack gap="4rem">
-          <h1 className='!font-sans !text-3xl !font-bold'>Welcome Mili, my {adjectives[currAdjIndex]} girlfriend!</h1>
+          <h1 className='!font-sans !text-3xl !font-bold'>Welcome Mili, my <TextTransition inline={true} springConfig={presets.molasses}>{adjectives[currAdjIndex]}</TextTransition> girlfriend!</h1>
           <p className='!font-serif !text-lg !italic'>It's been a while since we have seen each other and I would like to see you soon! Click the button below to get started.</p>
           <Button colorPalette="pink" variant="solid" onClick={() => router.push('/scheduler')}>
             Let's go! <RiArrowRightLine />
