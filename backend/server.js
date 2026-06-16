@@ -1,15 +1,12 @@
 import path from 'node:path';
 import process from 'node:process';
-import { authenticate } from '@google-cloud/local-auth';
+// import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 
-// const express = require('express');
 import express from 'express';
 import cors from 'cors';
 
 import dotenv from 'dotenv';
-
-// const cors = require('cors');
 
 const app = express();
 
@@ -21,7 +18,7 @@ dotenv.config();
 const PORT = process.env.PORT;
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
+// const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 
 
 app.post('/api/schedule', async (req, res) => {
@@ -47,12 +44,33 @@ app.post('/api/schedule', async (req, res) => {
         59
     ).toISOString();
 
-    const auth = await authenticate({
-        scopes: SCOPES,
-        keyfilePath: CREDENTIALS_PATH,
+    // const auth = await authenticate({
+    //     scopes: SCOPES,
+    //     keyfilePath: CREDENTIALS_PATH,
+    // });
+
+    const authClient = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        process.env.GOOGLE_REDIRECT_URI
+    );
+
+    authClient.setCredentials({
+        refresh_token: process.env.GOOGLE_REFRESH_TOKEN
+        // scope: SCOPES
     });
 
-    const calendar = google.calendar({ version: 'v3', auth });
+    await authClient.getAccessToken();
+
+    // const auth = new google.auth.GoogleAuth({
+    //     credentials: {
+    //         client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    //         private_key: process.env.GOOGLE_CLIENT_KEY.replace(/\\n/g, '\n')
+    //     },
+    //     scopes: SCOPES
+    // });
+
+    const calendar = google.calendar({ version: 'v3', auth: authClient });
 
     const event = {
         'summary': 'Date with Mili',
@@ -81,7 +99,6 @@ app.post('/api/schedule', async (req, res) => {
 
     try {
         const response = await calendar.events.insert({
-            auth: auth,
             calendarId: 'primary',
             resource: event,
             sendUpdates: 'all'
@@ -91,7 +108,7 @@ app.post('/api/schedule', async (req, res) => {
 
         res.json({
             status: "success",
-            eventLink: response.data.eventLink
+            eventLink: response.data.htmlLink
         });
     } catch (err) {
         console.log(`There was an error: ${err}`);
