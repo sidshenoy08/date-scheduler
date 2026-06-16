@@ -49,16 +49,15 @@ function Confirmation() {
                     borderColor="pink.100"
                 >
                     <Image
-                        src="/mili.png"
+                        src="/saiki.gif"
                         loading="eager"
                         alt="Mili"
-                        width={400}
-                        height={400}
+                        width={1000}
+                        height={600}
                         style={{
-                            width: "auto",
+                            width: "min(700px, 90vw)",
                             height: "auto",
-                            maxWidth: "80vw",
-                            borderRadius: "16px",
+                            borderRadius: "16px"
                         }}
                     />
                 </Box>
