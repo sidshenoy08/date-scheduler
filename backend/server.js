@@ -29,21 +29,35 @@ app.post('/api/schedule', async (req, res) => {
 
     // const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    const startDateTime = new Date(
+    const unformattedStartDateTime = new Date(
         unformattedDate.year,
         unformattedDate.month - 1,
         unformattedDate.day,
         unformattedTime.hour,
         unformattedTime.minute
-    ).toISOString();
+    );
 
-    const endDateTime = new Date(
+    const unformattedEndDateTime = new Date(
         unformattedDate.year,
         unformattedDate.month - 1,
         unformattedDate.day,
         23,
         59
-    ).toISOString();
+    );
+
+    const startDateTime =
+        `${unformattedStartDateTime.getFullYear()}-` +
+        `${String(unformattedStartDateTime.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(unformattedStartDateTime.getDate()).padStart(2, "0")}T` +
+        `${String(unformattedStartDateTime.getHours()).padStart(2, "0")}:` +
+        `${String(unformattedStartDateTime.getMinutes()).padStart(2, "0")}:00`;
+
+    const endDateTime =
+        `${unformattedEndDateTime.getFullYear()}-` +
+        `${String(unformattedEndDateTime.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(unformattedEndDateTime.getDate()).padStart(2, "0")}T` +
+        `${String(unformattedEndDateTime.getHours()).padStart(2, "0")}:` +
+        `${String(unformattedEndDateTime.getMinutes()).padStart(2, "0")}:00`;
 
     // const auth = await authenticate({
     //     scopes: SCOPES,
@@ -97,8 +111,6 @@ app.post('/api/schedule', async (req, res) => {
             ]
         }
     };
-
-    console.log(event);
 
     try {
         const response = await calendar.events.insert({
