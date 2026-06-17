@@ -27,8 +27,6 @@ app.post('/api/schedule', async (req, res) => {
     const timezone = req.body.timezone;
     const activities = req.body.activities;
 
-    console.log(timezone);
-
     // const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const startDateTime = new Date(
@@ -46,6 +44,10 @@ app.post('/api/schedule', async (req, res) => {
         23,
         59
     ).toISOString();
+
+    console.log(startDateTime);
+    console.log(endDateTime);
+    console.log(timezone);
 
     // const auth = await authenticate({
     //     scopes: SCOPES,
