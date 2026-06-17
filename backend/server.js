@@ -120,5 +120,7 @@ app.post('/api/schedule', async (req, res) => {
 });
 
 app.listen(PORT, () => {
+    const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tzName);
     console.log(`Server is running on port ${PORT}`);
 });

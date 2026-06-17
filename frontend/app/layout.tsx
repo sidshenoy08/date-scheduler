@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Sili Date Scheduler",
-  description: "Created with love by Sid",
+  description: "Created with love by Sid"
 };
 
 export default function RootLayout({
