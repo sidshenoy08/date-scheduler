@@ -9,7 +9,7 @@ import { IconButton, Spinner, Box, Center } from "@chakra-ui/react";
 import { GiConfirmed, GiCancel } from "react-icons/gi";
 import { useRouter } from "next/navigation";
 
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useEffect } from 'react';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -17,6 +17,12 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activities }) {
     const [scheduling, setScheduling] = useState(false);
+    const [userTimezone, setUserTimezone] = useState('');
+
+    useEffect(() => {
+        const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        setUserTimezone(localTimezone);
+    }, []);
 
     const router = useRouter();
 
@@ -36,6 +42,7 @@ function ConfirmDateDialog({ open, setOpen, selectedDate, selectedTime, activiti
                 body: JSON.stringify({
                     date: selectedDate,
                     time: selectedTime,
+                    timezone: userTimezone,
                     activities: activities
                 })
             });

@@ -24,9 +24,12 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 app.post('/api/schedule', async (req, res) => {
     const unformattedDate = req.body.date[0];
     const unformattedTime = req.body.time;
+    const timezone = req.body.timezone;
     const activities = req.body.activities;
 
-    const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(timezone);
+
+    // const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const startDateTime = new Date(
         unformattedDate.year,
@@ -78,11 +81,11 @@ app.post('/api/schedule', async (req, res) => {
         'description': `Planned activities: ${activities.join(", ")}`,
         'start': {
             'dateTime': startDateTime,
-            'timeZone': tzName
+            'timeZone': timezone
         },
         'end': {
             'dateTime': endDateTime,
-            'timeZone': tzName
+            'timeZone': timezone
         },
         'attendees': [
             { 'email': 'milipatel1041@gmail.com' },
@@ -120,7 +123,5 @@ app.post('/api/schedule', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(tzName);
     console.log(`Server is running on port ${PORT}`);
 });
