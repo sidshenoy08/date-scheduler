@@ -45,10 +45,6 @@ app.post('/api/schedule', async (req, res) => {
         59
     ).toISOString();
 
-    console.log(startDateTime);
-    console.log(endDateTime);
-    console.log(timezone);
-
     // const auth = await authenticate({
     //     scopes: SCOPES,
     //     keyfilePath: CREDENTIALS_PATH,
@@ -101,6 +97,8 @@ app.post('/api/schedule', async (req, res) => {
             ]
         }
     };
+
+    console.log(event);
 
     try {
         const response = await calendar.events.insert({
